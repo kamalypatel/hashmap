@@ -158,5 +158,13 @@ function createHashmap(loadFactor = 0, capacity = 16) {
         return values
     }
 
-    return {hash, set, get, has, remove, length, clear, returnKeys, returnValues}
+    const returnEntries = () => {
+        let entries = []
+        for (let i = 0; i < keys.length; i++){
+            entries[i] = [keys[i],values[i]] 
+        }
+        return entries
+    }
+
+    return {hash, set, get, has, remove, length, clear, returnKeys, returnValues, returnEntries}
 }
