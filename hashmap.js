@@ -14,6 +14,7 @@ function createHashmap(loadFactor = 0, capacity = 16) {
     let hashmap = new Array(capacity).fill(null)
 
     let keys = []
+    let values = []
 
     const hash = (key) => {
         let hashCode = 0
@@ -34,6 +35,7 @@ function createHashmap(loadFactor = 0, capacity = 16) {
         if (!hashmap[hashCode]) {
             hashmap[hashCode] = hashObject(newKey, newValue, null)
             keys.push(newKey)
+            values.push(newValue)
             loadFactor++
             return
         } 
@@ -55,6 +57,7 @@ function createHashmap(loadFactor = 0, capacity = 16) {
 
         current.setNextNode(hashObject(newKey, newValue))
         keys.push(newKey)
+        values.push(newValue)
         loadFactor++
         
     }
@@ -111,8 +114,9 @@ function createHashmap(loadFactor = 0, capacity = 16) {
         }
 
         if (hashmap[hashCode].getKey() == key) {
-            hashmap[hashCode] = hashmap[hashCode].getNextNode()
             keys.splice(keys.indexOf(key), 1)
+            values.splice(values.indexOf(hashmap[hashCode].getValue()), 1)
+            hashmap[hashCode] = hashmap[hashCode].getNextNode()
             loadFactor--
             return true
         }
@@ -121,8 +125,9 @@ function createHashmap(loadFactor = 0, capacity = 16) {
 
         while (current.getNextNode()) {
             if (current.getNextNode().getKey() == key) {
-                current.setNextNode(current.getNextNode().getNextNode())
                 keys.splice(keys.indexOf(key), 1)
+                values.splice(values.indexOf(current.getNextNode().getValue()), 1)
+                current.setNextNode(current.getNextNode().getNextNode())
                 loadFactor--
                 return true
             }
@@ -142,11 +147,16 @@ function createHashmap(loadFactor = 0, capacity = 16) {
         hashmap = new Array(capacity).fill(null)
         loadFactor = 0
         keys = []
+        values = []
     }
 
     const returnKeys = () => {
         return keys
     }
 
-    return {hash, set, get, has, remove, length, clear, returnKeys}
+    const returnValues = () => {
+        return values
+    }
+
+    return {hash, set, get, has, remove, length, clear, returnKeys, returnValues}
 }
