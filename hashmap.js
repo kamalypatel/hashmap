@@ -72,9 +72,58 @@ function createHashmap(loadFactor, capacity = 16) {
         }
 
         return null
-        
 
     }
 
-    return {hash, set, get}
+    const has = (key) => {
+
+        let hashCode = hash(key)
+
+        if (!hashmap[hashCode]) {
+            return false
+        }
+
+        let current = hashmap[hashCode]
+
+        while (current) {
+            if (current.getKey() == key) {
+                return true
+            }
+            current = current.getNextNode()
+        }
+
+        return false
+        
+    }
+
+    const remove = (key) => {
+
+        let hashCode = hash(key)
+
+        if (!hashmap[hashCode]) {
+            return false
+        }
+
+        if (hashmap[hashCode].getKey() == key) {
+            hashmap[hashCode] = hashmap[hashCode].getNextNode()
+            return true
+        }
+
+        let current = hashmap[hashCode]
+
+        while (current.getNextNode()) {
+            if (current.getNextNode().getKey() == key) {
+                current.setNextNode(current.getNextNode().getNextNode())
+                return true
+            }
+            current = current.getNextNode()
+        }
+
+        return false
+        
+    }
+
+
+
+    return {hash, set, get, has, remove}
 }
