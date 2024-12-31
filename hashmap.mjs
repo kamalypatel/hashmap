@@ -1,4 +1,6 @@
 
+export { node, createHashmap }
+
 function hashObject (key, value, nextNode = null) {
 
     const getKey = () => key
