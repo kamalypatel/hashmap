@@ -10,8 +10,10 @@ function hashObject (key, value, nextNode = null) {
     return {getKey, getValue, getNextNode, setValue, setNextNode}
 }
 
-function createHashmap(loadFactor, capacity = 16) {
+function createHashmap(loadFactor = 0, capacity = 16) {
     let hashmap = new Array(capacity).fill(null)
+
+    let keys = []
 
     const hash = (key) => {
         let hashCode = 0
@@ -31,6 +33,8 @@ function createHashmap(loadFactor, capacity = 16) {
 
         if (!hashmap[hashCode]) {
             hashmap[hashCode] = hashObject(newKey, newValue, null)
+            keys.push(newKey)
+            loadFactor++
             return
         } 
         
@@ -50,6 +54,8 @@ function createHashmap(loadFactor, capacity = 16) {
         }
 
         current.setNextNode(hashObject(newKey, newValue))
+        keys.push(newKey)
+        loadFactor++
         
     }
 
@@ -106,6 +112,8 @@ function createHashmap(loadFactor, capacity = 16) {
 
         if (hashmap[hashCode].getKey() == key) {
             hashmap[hashCode] = hashmap[hashCode].getNextNode()
+            keys.splice(keys.indexOf(key), 1)
+            loadFactor--
             return true
         }
 
@@ -114,6 +122,8 @@ function createHashmap(loadFactor, capacity = 16) {
         while (current.getNextNode()) {
             if (current.getNextNode().getKey() == key) {
                 current.setNextNode(current.getNextNode().getNextNode())
+                keys.splice(keys.indexOf(key), 1)
+                loadFactor--
                 return true
             }
             current = current.getNextNode()
@@ -123,7 +133,20 @@ function createHashmap(loadFactor, capacity = 16) {
         
     }
 
+    const length = () => {
 
+        return loadFactor
+    }
 
-    return {hash, set, get, has, remove}
+    const clear = () => {
+        hashmap = new Array(capacity).fill(null)
+        loadFactor = 0
+        keys = []
+    }
+
+    const returnKeys = () => {
+        return keys
+    }
+
+    return {hash, set, get, has, remove, length, clear, returnKeys}
 }
