@@ -1,6 +1,6 @@
-import { node, createHashmap } from './hashmap.mjs'
+import { createHashmap } from './hashmap.mjs'
 
-const test = new HashMap()
+const test = new createHashmap()
 
 test.set('apple', 'red')
 test.set('banana', 'yellow')
@@ -14,3 +14,5 @@ test.set('ice cream', 'white')
 test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
+
+console.log(test.returnEntries())

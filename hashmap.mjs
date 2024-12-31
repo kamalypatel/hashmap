@@ -1,5 +1,4 @@
-
-export { node, createHashmap }
+export { createHashmap }
 
 function hashObject (key, value, nextNode = null) {
 
