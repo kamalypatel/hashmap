@@ -12,7 +12,7 @@ function hashObject (key, value, nextNode = null) {
 
 function createHashmap(loadFactor, capacity = 16) {
     let hashmap = new Array(capacity).fill(null)
-       
+
     const hash = (key) => {
         let hashCode = 0
       
@@ -53,5 +53,28 @@ function createHashmap(loadFactor, capacity = 16) {
         
     }
 
-    return {hash, set}
+
+    const get = (key) => {
+
+        let hashCode = hash(key)
+
+        if (!hashmap[hashCode]) {
+            return null
+        }
+
+        let current = hashmap[hashCode]
+
+        while (current) {
+            if (current.getKey() == key) {
+                return current.getValue()
+            }
+            current = current.getNextNode()
+        }
+
+        return null
+        
+
+    }
+
+    return {hash, set, get}
 }
