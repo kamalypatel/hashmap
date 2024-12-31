@@ -1,8 +1,5 @@
 
 function hashObject (key, value, nextNode = null) {
-    let key = key
-    let value = value
-    let nextNode = nextNode
 
     const getKey = () => key
     const getValue = () => value
@@ -13,10 +10,9 @@ function hashObject (key, value, nextNode = null) {
     return {getKey, getValue, getNextNode, setValue, setNextNode}
 }
 
-let hashmap = []
-
 function createHashmap(loadFactor, capacity = 16) {
-    
+    let hashmap = new Array(capacity).fill(null)
+       
     const hash = (key) => {
         let hashCode = 0
       
@@ -29,13 +25,33 @@ function createHashmap(loadFactor, capacity = 16) {
         return hashCode
     }
 
-    const set = (key, value) => {
+    const set = (newKey, newValue) => {
         
-        let hashCode = hash(key)
+        let hashCode = hash(newKey)
 
-        hashmap[hashCode]
+        if (!hashmap[hashCode]) {
+            hashmap[hashCode] = hashObject(newKey, newValue, null)
+            return
+        } 
+        
+        let current = hashmap[hashCode]
 
+        if (current.getKey() == newKey) {
+            current.setValue(newValue)
+            return
+        }
+        
+        while (current.getNextNode()) {
+            current = current.getNextNode()
+            if (current.getKey() === newKey) {
+                current.setValue(newValue)
+                return
+            }
+        }
+
+        current.setNextNode(hashObject(newKey, newValue))
+        
     }
 
-    return {hash}
+    return {hash, set}
 }
